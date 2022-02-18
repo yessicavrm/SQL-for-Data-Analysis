@@ -1,0 +1,96 @@
+SELECT channel,
+      AVG(event_count) AS avg_event_count
+FROM
+(SELECT DATE_TRUNC('day', occurred_at) AS day,
+channel,
+COUNT(*) as event_count
+FROM demo.web_events_full
+GROUP BY 1,2
+ORDER BY 1
+) sub
+GROUP BY 1
+ORDER BY 2 DESC
+
+              /* Query against the result of the subquery
+              Subqueries are required to have aliases */
+              
+_____________________________________________________________________
+/* Use the test environment below to find the number of events that
+occur for each day for each channel. */
+
+SELECT DATE_TRUNC('day', occurred_at) AS day, channel, COUNT(*) as event_count
+FROM web_events
+GROUP BY 1,2
+ORDER BY event_count DESC
+_____________________________________________________________________
+
+/* Important to create readable subqueries, this can be done through
+   indentation */
+   
+_____________________________________________________________________
+SELECT  *
+FROM demo.orders
+WHERE DATE_TRUNC('month', occurred_at)
+        (SELECT DATE_TRUNC('month', MIN(occurred_at)) AS min_month
+        FROM demo.orders)
+ ORDER BY occurred_at
+ 
+ /* In the first subquery you wrote, you created a table that you could 
+ then query again in the FROM statement. However, if you are only 
+ returning a single value, you might use that value in a logical statement 
+ like WHERE, HAVING, or even SELECT - the value could be nested within 
+ a CASE statement. */
+ 
+ 
+ _____________________________________________________________________
+/* Next you will pull the average for each product on the first day */
+
+SELECT AVG(standard_qty) standard,
+	AVG(gloss_qty) gloss,
+    AVG(poster_qty) poster,
+    SUM(total_amt_usd)
+FROM orders
+WHERE DATE_TRUNC('month', occurred_at) = 
+	(SELECT MIN(DATE_TRUNC('month', occurred_at))
+	FROM orders)     
+ 
+ 
+  _____________________________________________________________________
+  
+ --Provide the name of the sales_rep in each region with the largest amount of total_amt_usd sales.
+ 
+ 
+ SELECT s.name as rep_name, r.region as region_name , SUM(o.total_amt_usd) as total_amt
+ FROM sales_rep s
+ JOIN accounts a
+ ON a.sales_rep = s.id
+ JOIN orders o
+ ON oaccount_id = a.id
+ JOIN region r
+ ON r.id = s.region_id
+ GROUP BY 1,2
+ ORDER BY 3 DESC
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
