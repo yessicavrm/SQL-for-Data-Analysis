@@ -1,2 +1,2 @@
-# SQL-for-Data-Analysis
-Courses taken through Udacity
+# SQL practice from different sources
+Udacity, Hackerrank, sqlzoo
