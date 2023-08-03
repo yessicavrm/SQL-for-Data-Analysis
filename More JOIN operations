@@ -1,0 +1,93 @@
+1.
+SELECT id, title
+ FROM movie
+ WHERE yr=1962
+
+2.
+select yr
+from movie
+where title = 'Citizen Kane'
+
+3.
+SELECT id, title, yr
+FROM movie
+WHERE title LIKE '%Star Trek%'
+ORDER BY yr;
+
+4.
+select id
+from actor
+where  name = 'Glenn Close'
+
+5.
+select id
+from movie
+where title = 'Casablanca'
+
+6.
+select name
+from actor
+join casting
+on actor.id=casting.actorid
+where movieid=27
+
+7.
+select a.name
+from actor a
+join casting c
+on a.id=c.actorid
+join movie m
+on c.movieid=m.id
+where m.title = 'Alien'
+
+8.
+select title
+from movie m
+join casting c
+on m.id = c.movieid
+join actor a
+on c.actorid=a.id
+where name = 'Harrison Ford'
+9. 
+select title
+from movie m
+join casting c
+on m.id = c.movieid
+join actor a
+on c.actorid=a.id
+where name = 'Harrison Ford' and ord!=1
+
+10.
+select title, name
+from movie m
+join casting c
+on m.id = c.movieid
+join actor a
+on c.actorid=a.id
+where  c.ord=1 and m.yr = 1962
+
+11.
+select yr, count(name)
+from movie m
+join casting c
+on m.id = c.movieid
+join actor a
+on c.actorid=a.id
+where  name= 'Rock Hudson' 
+group by yr
+having count(name) > 2
+
+12.
+with data as( select title, name, ord
+from casting c
+join movie m
+on c.movieid=m.id
+join actor a
+on m.id=a.id
+where ord=1
+)
+select title, name
+from data
+where name='Julie Andrews'
+
+
