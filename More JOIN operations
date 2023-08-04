@@ -78,16 +78,69 @@ group by yr
 having count(name) > 2
 
 12.
-with data as( select title, name, ord
-from casting c
-join movie m
+select m.title, a.name
+from movie m
+join  casting c
 on c.movieid=m.id
 join actor a
-on m.id=a.id
-where ord=1
+on a.id=c.actorid
+where movieid IN (select movieid from casting join actor on actorid=actor.id where name='Julie Andrews') and ord=1
+
+13.
+Wrong___________________________-
+with data AS(select name, count(ord=1) as count_num
+from actor a
+join casting c
+on a.id=c.actorid
+group by name
 )
-select title, name
+select name
 from data
-where name='Julie Andrews'
+where count_num > 15
+Right___________________________-
+select name
+from actor a
+join casting c
+on a.id=c.actorid
+where ord=1
+group by name
+HAVING count(*) > 14
+
+14.
+
+select m.title, COUNT(a.name) as nums
+from movie m
+join  casting c
+on c.movieid=m.id
+join actor a
+on a.id=c.actorid
+where yr= 1978
+group by title
+ORDER BY nums desc, title
+
+15. *****
+SELECT a.name
+  FROM (SELECT movie.*
+          FROM movie
+          JOIN casting
+            ON casting.movieid = movie.id
+          JOIN actor
+            ON actor.id = casting.actorid
+         WHERE actor.name = 'Art Garfunkel') AS m
+  JOIN (SELECT actor.*, casting.movieid
+          FROM actor
+          JOIN casting
+            ON casting.actorid = actor.id
+         WHERE actor.name != 'Art Garfunkel') as a
+    ON m.id = a.movieid;
+
+
+
+
+
+
+
+
+
 
 
